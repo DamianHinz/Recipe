@@ -24,6 +24,19 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
         this.context = context;
     }
 
+
+    private String IngredientListToString() {
+
+        if (recipesArrayList == null) {
+            return "";
+        }
+        String erg = "";
+        for (int i = 0;i < recipesArrayList.get(0).getIngredient().size();i++) {
+            erg += recipesArrayList.get(0).getIngredient().get(i).toString() + "\n";
+        }
+        return erg;
+    }
+
     @NonNull
     @Override
     public RecipeRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +48,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
     public void onBindViewHolder(@NonNull RecipeRVAdapter.ViewHolder holder, int position) {
         // setting data to our text views from our modal class.
         Recipe recipes = recipesArrayList.get(position);
-        holder.ingredientTV.setText("Ingredients: " + recipes.getIngredient());
+        holder.ingredientTV.setText(IngredientListToString());
         holder.recipeNameTV.setText("Name: " + recipes.getName());
     }
 

@@ -26,6 +26,7 @@ public class ViewRecipe extends AppCompatActivity {
     // and our progress bar.
     private RecyclerView recipeRV;
     private ArrayList<Recipe> recipesArrayList;
+    private ArrayList<Ingredient> ingredientArrayList;
     private RecipeRVAdapter recipeRVAdapter;
     private FirebaseFirestore db;
     ProgressBar loadingPB;

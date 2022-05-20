@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class AddRecipeActivity extends AppCompatActivity {
 
     private EditText recipeIngredientEdt, recipeNameEdt;
@@ -36,7 +38,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         CollectionReference dbRecipe = db.collection("Recipe");
 
         //adding data to recipe object class
-        Recipe recipe = new Recipe(recipeIngredient, recipeName);
+        Recipe recipe = new Recipe(new ArrayList<Ingredient>(), recipeName);
 
         DocumentReference docIdRef = db.collection("Recipe").document(recipeName);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

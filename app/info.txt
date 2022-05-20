@@ -1,0 +1,6 @@
+Info:
+Die Array List von den Rezepten wird anscheinend korrekt durchlaufen. Das Problem ist momentan wohl das die Array List
+der Zutaten leer ist. Dadurch kommt es zu einem Fehler.
+Entweder sollte das mit einem "== null" Check zum testen überbrückt werden, oder es sollte als
+nächstes daran gearbeitet werden die Zutaten als ArrayList in der Datenbank zu speichern,
+bzw. die daten in der Datenbank als ArrayList zurück zu geben.
