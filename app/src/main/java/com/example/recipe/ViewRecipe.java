@@ -50,7 +50,7 @@ public class ViewRecipe extends AppCompatActivity {
         recipeRV.setLayoutManager(new LinearLayoutManager(this));
 
         // adding our array list to our recycler view adapter class.
-        recipeRVAdapter = new RecipeRVAdapter(recipesArrayList, this);
+        recipeRVAdapter = new RecipeRVAdapter(recipesArrayList, this, 0); //change mode to 1 when show ingredients of recipe
 
         // setting adapter to our recycler view.
         recipeRV.setAdapter(recipeRVAdapter);

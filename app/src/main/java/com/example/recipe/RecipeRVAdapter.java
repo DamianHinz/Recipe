@@ -13,15 +13,17 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHolder> {
+public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.RecipeViewHolder> {
     // creating variables for our ArrayList and context
     private ArrayList<Recipe> recipesArrayList;
     private Context context;
+    private int mode; //0 only recipe, 1 recipe with ingredients
 
     // creating constructor for our adapter class
-    public RecipeRVAdapter(ArrayList<Recipe> recipesArrayList, Context context) {
+    public RecipeRVAdapter(ArrayList<Recipe> recipesArrayList, Context context, int mode) {
         this.recipesArrayList = recipesArrayList;
         this.context = context;
+        this.mode = mode;
     }
 
 
@@ -39,16 +41,20 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
 
     @NonNull
     @Override
-    public RecipeRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeRVAdapter.RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // passing our layout file for displaying our card item
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false));
+        return new RecipeViewHolder(LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeRVAdapter.RecipeViewHolder holder, int position) {
         // setting data to our text views from our modal class.
         Recipe recipes = recipesArrayList.get(position);
-        holder.ingredientTV.setText(IngredientListToString());
+        if (mode == 1) {
+            holder.ingredientTV.setText(IngredientListToString());
+        } else {
+            holder.ingredientTV.setText("");
+        }
         holder.recipeNameTV.setText("Name: " + recipes.getName());
     }
 
@@ -58,13 +64,13 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
         return recipesArrayList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class RecipeViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our text views.
         private final TextView ingredientTV;
         private final TextView recipeNameTV;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our text views.
             ingredientTV = itemView.findViewById(R.id.idTVIngredient);
