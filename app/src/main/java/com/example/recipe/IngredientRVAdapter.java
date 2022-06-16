@@ -25,13 +25,13 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     @Override
     public IngredientRVAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // passing our layout file for displaying our card item
-        return new IngredientRVAdapter.IngredientViewHolder(LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false));
+        return new IngredientRVAdapter.IngredientViewHolder(LayoutInflater.from(context).inflate(R.layout.ingredient_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IngredientRVAdapter.IngredientViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull IngredientRVAdapter.IngredientViewHolder holderIn, int position) {
         Ingredient ingredients = ingredientArrayList.get(position);
-        holder.ingredientTV.setText(position + ". " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
+        holderIn.ingredientTV.setText((position + 1) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our text views.
-            ingredientTV = itemView.findViewById(R.id.idTVIngredient);
+            ingredientTV = itemView.findViewById(R.id.idTVIngredientItem);
         }
     }
 }

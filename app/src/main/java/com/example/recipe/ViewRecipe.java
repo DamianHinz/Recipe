@@ -1,6 +1,9 @@
 package com.example.recipe;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -26,10 +29,15 @@ public class ViewRecipe extends AppCompatActivity {
     // and our progress bar.
     private RecyclerView recipeRV;
     private ArrayList<Recipe> recipesArrayList;
-    private ArrayList<Ingredient> ingredientArrayList;
     private RecipeRVAdapter recipeRVAdapter;
     private FirebaseFirestore db;
     ProgressBar loadingPB;
+
+
+    //To start ViewIngredient after a recipe has been clicked
+    public void startIngredientIntent(Intent i) {
+        startActivity(i);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +58,15 @@ public class ViewRecipe extends AppCompatActivity {
         recipeRV.setLayoutManager(new LinearLayoutManager(this));
 
         // adding our array list to our recycler view adapter class.
-        recipeRVAdapter = new RecipeRVAdapter(recipesArrayList, this, 0); //change mode to 1 when show ingredients of recipe
+        recipeRVAdapter = new RecipeRVAdapter(recipesArrayList, this, this);
 
         // setting adapter to our recycler view.
         recipeRV.setAdapter(recipeRVAdapter);
 
+
+
         // below line is use to get the data from Firebase Firestore.
-        // previously we were saving data on a reference of Courses
+        // previously we were saving data on a reference of Recipes
         // now we will be getting the data from the same reference.
         db.collection("Recipe").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -82,7 +92,7 @@ public class ViewRecipe extends AppCompatActivity {
                                 recipesArrayList.add(c);
                             }
                             // after adding the data to recycler view.
-                            // we are calling recycler view notifuDataSetChanged
+                            // we are calling recycler view notifyDataSetChanged
                             // method to notify that data has been changed in recycler view.
                             recipeRVAdapter.notifyDataSetChanged();
                         } else {
@@ -100,3 +110,5 @@ public class ViewRecipe extends AppCompatActivity {
         });
     }
 }
+
+

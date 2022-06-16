@@ -1,10 +1,15 @@
 package com.example.recipe;
 
+import android.content.Intent;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,26 +22,13 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
     // creating variables for our ArrayList and context
     private ArrayList<Recipe> recipesArrayList;
     private Context context;
-    private int mode; //0 only recipe, 1 recipe with ingredients
+    private ViewRecipe upper;
 
     // creating constructor for our adapter class
-    public RecipeRVAdapter(ArrayList<Recipe> recipesArrayList, Context context, int mode) {
+    public RecipeRVAdapter(ArrayList<Recipe> recipesArrayList, Context context, ViewRecipe upper) {
         this.recipesArrayList = recipesArrayList;
         this.context = context;
-        this.mode = mode;
-    }
-
-
-    private String IngredientListToString() {
-
-        if (recipesArrayList == null) {
-            return "";
-        }
-        String erg = "";
-        for (int i = 0;i < recipesArrayList.get(0).getIngredient().size();i++) {
-            erg += recipesArrayList.get(0).getIngredient().get(i).toString() + "\n";
-        }
-        return erg;
+        this.upper = upper;
     }
 
     @NonNull
@@ -50,11 +42,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
     public void onBindViewHolder(@NonNull RecipeRVAdapter.RecipeViewHolder holder, int position) {
         // setting data to our text views from our modal class.
         Recipe recipes = recipesArrayList.get(position);
-        if (mode == 1) {
-            holder.ingredientTV.setText(IngredientListToString());
-        } else {
-            holder.ingredientTV.setText("");
-        }
+        holder.ingredientTV.setText("");
         holder.recipeNameTV.setText("Name: " + recipes.getName());
     }
 
@@ -69,13 +57,30 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         private final TextView ingredientTV;
         private final TextView recipeNameTV;
 
+        public String convertRecipeNameTV (TextView nameTV) {
+            String erg = nameTV.getText().toString();
+            return erg.substring(6);
+        }
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our text views.
             ingredientTV = itemView.findViewById(R.id.idTVIngredient);
             recipeNameTV = itemView.findViewById(R.id.idTVRecipeName);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //creates a Bundle with the Name of the clicked recipe
+                    Bundle b = new Bundle();
+                    b.putString("clickedRecipe", convertRecipeNameTV(recipeNameTV));
+                    //Starts new activity to show ingredients of clicked recipe
+                    Intent in = new Intent(context, ViewIngredient.class);
+                    in.putExtras(b);
+                    System.out.println("Bundle Input: " + recipeNameTV.getText().toString());
+                    upper.startIngredientIntent(in);
+                }
+            });
         }
+
     }
 }
