@@ -24,21 +24,21 @@ import java.util.ArrayList;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
-    private EditText recipeIngredientEdt, recipeNameEdt;
+    private EditText  recipeNameEdt;
 
     private Button submitRecipeBtn;
 
-    private String recipeIngredient, recipeName;
+    private String recipeName;
 
     private FirebaseFirestore db;
 
-    private void addDataToFirestore(String recipeIngredient) {
+    private void addDataToFirestore() {
 
         //creating collection Reference for database
         CollectionReference dbRecipe = db.collection("Recipe");
 
         //adding data to recipe object class
-        Recipe recipe = new Recipe(new ArrayList<Ingredient>(), recipeName);
+        Recipe recipe = new Recipe(recipeName);
 
         DocumentReference docIdRef = db.collection("Recipe").document(recipeName);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -46,7 +46,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    if (document.exists()) { //If Recipe already exists
                         Toast.makeText(AddRecipeActivity.this, "Recipe already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         dbRecipe.document(recipeName).set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -77,7 +77,6 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        recipeIngredientEdt = findViewById(R.id.idEdtRecipeIngredient);
         recipeNameEdt = findViewById(R.id.idEdtRecipeName);
         submitRecipeBtn = findViewById(R.id.idBtnSubmitRecipe);
 
@@ -87,17 +86,14 @@ public class AddRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //getting Data from edittext field
-                recipeIngredient = recipeIngredientEdt.getText().toString();
                 recipeName = recipeNameEdt.getText().toString();
 
                 //check if text field is empty
-                if (TextUtils.isEmpty(recipeIngredient)) {
-                    recipeIngredientEdt.setError("Please enter Ingredient.");
-                } else if (TextUtils.isEmpty(recipeName)) {
+                if (TextUtils.isEmpty(recipeName)) {
                     recipeNameEdt.setError("Please enter recipe Name");
                 } else {
                     //calling function to add data to Firebase Firestore
-                    addDataToFirestore(recipeIngredient);
+                    addDataToFirestore();
                 }
             }
         });

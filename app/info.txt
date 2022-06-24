@@ -1,6 +1,0 @@
-Info:
-Neue Auflistungsseite mit Ingredients in arbeit.
-IngredientRVAdapter fertig, jetzt muss eine View(wie ViewRecipe) geschrieben werden,
-die die Ingredients als auflistung wieder gibt.
-Wenn das erledigt ist sollten die Ingredients aufgelistet werden sobald ein
-Rezept aus ViewRecipe angeklickt wird.
