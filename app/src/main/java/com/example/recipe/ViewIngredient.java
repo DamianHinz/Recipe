@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Button;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
+
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +30,7 @@ public class ViewIngredient extends AppCompatActivity{
     private IngredientRVAdapter ingredientRVAdapter;
     private String recipeName;
     private FirebaseFirestore db;
+    private Button toAddIngredientBtn;
     ProgressBar loadingPB;
 
     public String getRecipeName(){ return this.recipeName; }
@@ -54,12 +59,13 @@ public class ViewIngredient extends AppCompatActivity{
 
         ingredientRV.setAdapter(ingredientRVAdapter);
 
+        //Checks if the received recipe exists
         Bundle b = getIntent().getExtras();
         if(b != null) {
             setRecipeName(b.getString("clickedRecipe"));
-            System.out.println("Bundle Output: (" + getRecipeName() + ")");
         }
 
+        DocumentReference checkDocRef = db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients").document("1");
 
         //getting Data from Database
         db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -79,6 +85,7 @@ public class ViewIngredient extends AppCompatActivity{
                     //notify that data has been changed
                     ingredientRVAdapter.notifyDataSetChanged();
                 } else {
+                    loadingPB.setVisibility(View.GONE);
                     Toast.makeText(ViewIngredient.this, "No Data found in Database", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -90,5 +97,14 @@ public class ViewIngredient extends AppCompatActivity{
             }
         });
 
+        toAddIngredientBtn = findViewById(R.id.idBtnToAddIngredient);
+
+        toAddIngredientBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V) {
+                Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }

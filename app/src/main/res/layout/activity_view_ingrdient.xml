@@ -1,23 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/firstLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewRecipe">
 
     <!--Recycler view for displaying
         our data from Firestore-->
+
+    <!-- Button to add new Ingredients -->
+
+
+    <!--Progress bar for showing loading screen-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVIngredient"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--Progress bar for showing loading screen-->
     <ProgressBar
         android:id="@+id/idProgressBarIngredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+    <LinearLayout
+        android:id="@+id/secondLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/idBtnToAddIngredient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/idRVIngredient"
+        android:layout_weight="1"
+        android:text="Add Ingredient"
+        android:textAllCaps="false" />
 
 </RelativeLayout>
+
