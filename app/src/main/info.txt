@@ -1,3 +1,2 @@
 Info:
-Layout zum hinzufügen von Ingredients fertig. (Noch keine Funktionalität! Submit Button funktioniert aber Daten werden nicht gespeichert.)
-Von View Recipe aus Rezept auswählen zu dem Zutaten hinzugefügt werden sollen. Leere Rezepte abfangen!
+Code für das Hinzufügen von Zutaten steht, gibt aber noch Bugs beim laden des Recepts um die Zutat Anzahl zu bestimmen.

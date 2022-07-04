@@ -76,7 +76,6 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
                     //Starts new activity to show ingredients of clicked recipe
                     Intent in = new Intent(context, ViewIngredient.class);
                     in.putExtras(b);
-                    System.out.println("Bundle Input: " + recipeNameTV.getText().toString());
                     upper.startIngredientIntent(in);
                 }
             });

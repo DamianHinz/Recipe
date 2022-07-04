@@ -65,8 +65,6 @@ public class ViewIngredient extends AppCompatActivity{
             setRecipeName(b.getString("clickedRecipe"));
         }
 
-        DocumentReference checkDocRef = db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients").document("1");
-
         //getting Data from Database
         db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -102,7 +100,12 @@ public class ViewIngredient extends AppCompatActivity{
         toAddIngredientBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View V) {
+                //Creates Bundle with clicked recipe name.
+                Bundle b = new Bundle();
+                b.putString("clickedRecipe", getRecipeName());
+
                 Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
+                i.putExtras(b);
                 startActivity(i);
             }
         });
