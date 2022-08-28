@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -94,6 +95,13 @@ public class AddRecipeActivity extends AppCompatActivity {
                 } else {
                     //calling function to add data to Firebase Firestore
                     addDataToFirestore();
+
+                    //Put Ingredients in new Recipe
+                    Bundle b = new Bundle();
+                    b.putString("clickedRecipe", recipeName);
+                    Intent i = new Intent(AddRecipeActivity.this, AddIngredientsActivity.class); //To add new ingredients
+                    i.putExtras(b);
+                    startActivity(i);
                 }
             }
         });

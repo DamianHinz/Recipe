@@ -27,7 +27,7 @@ public class AddIngredientsActivity extends AppCompatActivity{
 
     private Button submitIngredientBtn;
 
-    private String ingredientName, ingredientUnit, recipeName;
+    private String ingredientName, ingredientUnit, recipeName, ingredientAmountStr;
 
     private double ingredientAmount;
 
@@ -118,20 +118,26 @@ public class AddIngredientsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 ingredientName = ingredientNameEdt.getText().toString();
-                ingredientAmount = Double.parseDouble(ingredientAmountEdt.getText().toString());
+                ingredientAmountStr = ingredientAmountEdt.getText().toString();
+                //ingredientAmount = Double.parseDouble(ingredientAmountEdt.getText().toString());
                 ingredientUnit = ingredientUnitEdt.getText().toString();
 
                 //to check if some fields are empty
                 boolean error = false;
 
                 if (TextUtils.isEmpty(ingredientName)) {
-                    ingredientNameEdt.setError("Please enter recipe unit");
+                    ingredientNameEdt.setError("Please enter ingredient name");
                     error = true;
-                } if (TextUtils.isEmpty(ingredientUnit)) {
+                } if (TextUtils.isEmpty(ingredientAmountStr)) {
+                    ingredientAmountEdt.setError("Please enter ingredient amount");
+                    error = true;
+                }
+                if (TextUtils.isEmpty(ingredientUnit)) {
                     ingredientUnitEdt.setError("Please enter ingredient unit");
                     error = true;
                 } if (!error) {
                     Recipe recipe;
+                    ingredientAmount = Double.parseDouble(ingredientAmountStr); //convert number string to double
                     DocumentReference docRef = db.collection("Recipe").document("" + getRecipeName());
                     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
