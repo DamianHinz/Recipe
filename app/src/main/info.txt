@@ -1,2 +1,5 @@
 Info:
-Code für das Hinzufügen von Zutaten steht, gibt aber noch Bugs beim laden des Recepts um die Zutat Anzahl zu bestimmen.
+Polishing für das Hinzufügen von Zutaten
+- Abfangen von falschen Angaben
+- Abfangen von leeren Feldern.
+- Nach dem Hinzufügen zu aktuelle Zutaten anzeigen.
