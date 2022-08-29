@@ -5,26 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".DashboardActivity">
 
     <!--Edittext for getting Recipe Name-->
 
     <Button
-        android:id="@+id/idBtnToLogin"
+        android:id="@+id/idBtnToAddRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Login"
+        android:text="Submit Recipe"
         android:textAllCaps="false" />
 
 
     <!--Button for showing the list of added courses-->
     <Button
-        android:id="@+id/idBtnToRegistration"
+        android:id="@+id/idBtnViewRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Register"
+        android:text="View added Recipe"
         android:textAllCaps="false" />
 
 

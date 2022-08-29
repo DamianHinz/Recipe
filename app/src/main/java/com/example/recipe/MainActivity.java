@@ -7,48 +7,36 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    //creating variable for Button
-    private Button viewRecipeBtn, toAddRecipeBtn;
-
-
-
-    //creating variable for Firebase Firestore
-    private FirebaseFirestore db;
+    private Button toLoginBtn, toRegistrationBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //getting instance from Firebase Firestore
-        db = FirebaseFirestore.getInstance();
+        //initialize Buttons
+        toLoginBtn = findViewById(R.id.idBtnToLogin);
+        toRegistrationBtn = findViewById(R.id.idBtnToRegistration);
 
-        //initializing our edittext and button
-        viewRecipeBtn = findViewById(R.id.idBtnViewRecipe);
-        toAddRecipeBtn = findViewById(R.id.idBtnToAddRecipe);
-
-        // adding onclick listener to view data in new activity
-        viewRecipeBtn.setOnClickListener(new View.OnClickListener() {
+        // adding onclick listener to start login activity
+        toLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // opening a new activity on button click
-                Intent i = new Intent(MainActivity.this,ViewRecipe.class);
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
             }
         });
 
-
         // adding onclick listener to view data in new activity
-        toAddRecipeBtn.setOnClickListener(new View.OnClickListener() {
+        toRegistrationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // opening a new activity on button click
-                Intent i = new Intent(MainActivity.this, AddRecipeActivity.class);
+                Intent i = new Intent(MainActivity.this, RegistrationActivity.class);
                 startActivity(i);
             }
         });
