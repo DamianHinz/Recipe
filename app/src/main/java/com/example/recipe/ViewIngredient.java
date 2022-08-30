@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,8 +29,9 @@ public class ViewIngredient extends AppCompatActivity{
     private RecyclerView ingredientRV;
     private ArrayList ingredientArrayList;
     private IngredientRVAdapter ingredientRVAdapter;
-    private String recipeName;
+    private String recipeName, currentUid;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     private Button toAddIngredientBtn;
     ProgressBar loadingPB;
 
@@ -49,6 +51,8 @@ public class ViewIngredient extends AppCompatActivity{
         loadingPB = findViewById(R.id.idProgressBarIngredient);
 
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUid = mAuth.getCurrentUser().getUid();
 
         //creating ArrayList
         ingredientArrayList = new ArrayList<>();
@@ -66,7 +70,7 @@ public class ViewIngredient extends AppCompatActivity{
         }
 
         //getting Data from Database
-        db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 //check if query snapshot is empty or not

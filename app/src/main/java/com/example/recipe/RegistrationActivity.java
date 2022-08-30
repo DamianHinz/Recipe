@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -22,12 +23,15 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button registerBtn;
     private ProgressBar progressbar;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        db = FirebaseFirestore.getInstance();
 
         // taking FirebaseAuth instance
         mAuth = FirebaseAuth.getInstance();
@@ -72,7 +76,15 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(),"Registration successful",Toast.LENGTH_LONG).show();
+                    User user = new User(email, mAuth.getUid());
+                    System.out.println(user.toString());
+
+                    db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(getApplicationContext(),"Registration successful",Toast.LENGTH_LONG).show();
+                        }
+                    });
 
                     progressbar.setVisibility(View.GONE);
 

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,13 +42,19 @@ public class AddIngredientsActivity extends AppCompatActivity{
         return recipeName;
     }
 
+    public FirebaseAuth mAuth;
 
-    //gets clicked Reciped to access ingredient count
+    String currentUid;
+
+
+    //gets clicked Recipe to access ingredient count
     private void addIngredientToFirestore(Recipe recipe) {
+
+
 
         Ingredient ingredient = new Ingredient(ingredientName, ingredientUnit, ingredientAmount);
 
-        CollectionReference dbRecipeIngredients = db.collection("Recipe").document("" + getRecipeName()).collection("Ingredients");
+        CollectionReference dbRecipeIngredients = db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients");
 
         String nextIngredientNum = String.valueOf(recipe.getIngredientCount() + 1);
         DocumentReference docIdRef = dbRecipeIngredients.document("" + nextIngredientNum);
@@ -85,7 +92,7 @@ public class AddIngredientsActivity extends AppCompatActivity{
 
     public void incrementIngredientCount(Recipe recipe) {
         recipe.setIngredientCount(recipe.getIngredientCount() + 1);
-        DocumentReference docRef = db.collection("Recipe").document("" + getRecipeName());
+        DocumentReference docRef = db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName());
         docRef.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -104,6 +111,10 @@ public class AddIngredientsActivity extends AppCompatActivity{
         if(b != null) {
             setRecipeName(b.getString("clickedRecipe"));
         }
+
+        mAuth = FirebaseAuth.getInstance();
+
+        currentUid = mAuth.getUid();
 
         db = FirebaseFirestore.getInstance();
 
@@ -138,7 +149,7 @@ public class AddIngredientsActivity extends AppCompatActivity{
                 } if (!error) {
                     Recipe recipe;
                     ingredientAmount = Double.parseDouble(ingredientAmountStr); //convert number string to double
-                    DocumentReference docRef = db.collection("Recipe").document("" + getRecipeName());
+                    DocumentReference docRef = db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName());
                     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {

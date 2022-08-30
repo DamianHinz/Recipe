@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,15 +34,20 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    private FirebaseAuth mAuth;
+
     private void addDataToFirestore() {
 
+
+        String currentUid = mAuth.getCurrentUser().getUid();
+
         //creating collection Reference for database
-        CollectionReference dbRecipe = db.collection("Recipe");
+        CollectionReference dbRecipe = db.collection("Users").document(currentUid).collection("Recipe");
 
         //adding data to recipe object class
         Recipe recipe = new Recipe(recipeName, 0);
 
-        DocumentReference docIdRef = db.collection("Recipe").document(recipeName);
+        DocumentReference docIdRef = db.collection("Users").document(currentUid).collection("Recipe").document(recipeName);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -76,6 +82,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_recipe);
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         recipeNameEdt = findViewById(R.id.idEdtRecipeName);

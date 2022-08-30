@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,6 +32,8 @@ public class ViewRecipe extends AppCompatActivity {
     private ArrayList<Recipe> recipesArrayList;
     private RecipeRVAdapter recipeRVAdapter;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private String currentUid;
     ProgressBar loadingPB;
 
 
@@ -51,6 +54,8 @@ public class ViewRecipe extends AppCompatActivity {
         // initializing our variable for firebase
         // firestore and getting its instance.
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUid = mAuth.getCurrentUser().getUid();
 
         // creating our new array list
         recipesArrayList = new ArrayList<>();
@@ -68,7 +73,7 @@ public class ViewRecipe extends AppCompatActivity {
         // below line is use to get the data from Firebase Firestore.
         // previously we were saving data on a reference of Recipes
         // now we will be getting the data from the same reference.
-        db.collection("Recipe").get()
+        db.collection("Users").document(currentUid).collection("Recipe").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
