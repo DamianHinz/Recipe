@@ -19,22 +19,32 @@
         <!--Textview for displaying our ingredient-->
         <TextView
             android:id="@+id/idTVRecipeName"
-            android:layout_width="match_parent"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text="RecipeName"
             android:textColor="@color/purple_500"
             android:textSize="18sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/idTVIngredient"
-            android:layout_width="match_parent"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:padding="2dp"
             android:text="IngredientName"
             android:textColor="@color/purple_500"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/idBtnRecipeDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="275dp"
+            android:text="Delete"
+            android:visibility="gone"
+            android:textAllCaps="true" />
 
     </LinearLayout>
 

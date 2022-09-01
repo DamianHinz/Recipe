@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,7 +35,14 @@ public class ViewRecipe extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUid;
+    private Button deleteModeBtn;
     ProgressBar loadingPB;
+
+    private boolean deleteMode = false;
+
+    public boolean getDeleteMode() { return  deleteMode; }
+
+    private void setDeleteMode(boolean mode) {deleteMode = mode; }
 
 
     //To start ViewIngredient after a recipe has been clicked
@@ -46,10 +54,12 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+        deleteMode = false;
 
         // initializing our variables.
         recipeRV = findViewById(R.id.idRVRecipes);
         loadingPB = findViewById(R.id.idProgressBar);
+        deleteModeBtn = findViewById(R.id.idBtnRecipeDeleteMode);
 
         // initializing our variable for firebase
         // firestore and getting its instance.
@@ -60,14 +70,13 @@ public class ViewRecipe extends AppCompatActivity {
         // creating our new array list
         recipesArrayList = new ArrayList<>();
         recipeRV.setHasFixedSize(true);
-        recipeRV.setLayoutManager(new LinearLayoutManager(this));
+        recipeRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         // adding our array list to our recycler view adapter class.
         recipeRVAdapter = new RecipeRVAdapter(recipesArrayList, this, this);
 
         // setting adapter to our recycler view.
         recipeRV.setAdapter(recipeRVAdapter);
-
 
 
         // below line is use to get the data from Firebase Firestore.
@@ -113,6 +122,26 @@ public class ViewRecipe extends AppCompatActivity {
                 Toast.makeText(ViewRecipe.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchDeleteMode();
+                Toast.makeText(getApplicationContext(),"Delete mode activated", Toast.LENGTH_LONG).show();
+                refreshForDeleteMode();
+            }
+        });
+    }
+
+    private void refreshForDeleteMode() {
+        RecipeRVAdapter adapter = new RecipeRVAdapter(recipesArrayList, this, this);
+        recipeRV.setAdapter(adapter);
+    }
+
+    private void switchDeleteMode() {
+        if (getDeleteMode()) {
+            setDeleteMode(false);
+        } else setDeleteMode(true);
     }
 }
 

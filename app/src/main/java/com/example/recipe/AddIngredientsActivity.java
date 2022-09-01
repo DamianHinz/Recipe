@@ -154,6 +154,9 @@ public class AddIngredientsActivity extends AppCompatActivity{
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             addIngredientToFirestore(documentSnapshot.toObject(Recipe.class));
+                            ingredientAmountEdt.setText("");
+                            ingredientNameEdt.setText("");
+                            ingredientUnitEdt.setText("");
                         }
                     });
 

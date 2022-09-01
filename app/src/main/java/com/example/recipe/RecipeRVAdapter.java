@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         Recipe recipes = recipesArrayList.get(position);
         holder.ingredientTV.setText("");
         holder.recipeNameTV.setText("Name: " + recipes.getName());
+        holder.deleteBtn.setText("DELETE RECIPE");
     }
 
     @Override
@@ -56,6 +58,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         // creating variables for our text views.
         private final TextView ingredientTV;
         private final TextView recipeNameTV;
+        private Button deleteBtn;
 
         public String convertRecipeNameTV (TextView nameTV) {
             String erg = nameTV.getText().toString();
@@ -67,6 +70,10 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
             // initializing our text views.
             ingredientTV = itemView.findViewById(R.id.idTVIngredient);
             recipeNameTV = itemView.findViewById(R.id.idTVRecipeName);
+            deleteBtn = itemView.findViewById(R.id.idBtnRecipeDelete);
+            if (upper.getDeleteMode()) {
+                deleteBtn.setVisibility(View.VISIBLE);
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
