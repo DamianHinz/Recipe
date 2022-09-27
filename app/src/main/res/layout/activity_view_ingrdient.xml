@@ -38,10 +38,24 @@
     <Button
         android:id="@+id/idBtnToAddIngredient"
         android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_above="@id/idBtnIngredientDeleteMode"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:text="Add Ingredient"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/idBtnIngredientDeleteMode"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/idRVIngredient"
         android:layout_weight="1"
-        android:text="Add Ingredient"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="DELETE MODE"
+        android:visibility="visible"
         android:textAllCaps="false" />
 
 </RelativeLayout>

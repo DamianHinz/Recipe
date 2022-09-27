@@ -32,8 +32,14 @@ public class ViewIngredient extends AppCompatActivity{
     private String recipeName, currentUid;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private Button toAddIngredientBtn;
+    private Button toAddIngredientBtn, deleteModeBtn;
     ProgressBar loadingPB;
+
+    private Boolean deleteMode = false;
+
+    public Boolean getDeleteMode() { return deleteMode; }
+
+    public void setDeleteMode(Boolean deleteMode) { this.deleteMode = deleteMode; }
 
     public String getRecipeName(){ return this.recipeName; }
 
@@ -45,10 +51,12 @@ public class ViewIngredient extends AppCompatActivity{
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_view_ingrdient);
+        deleteMode = false;
 
         //initializing variables
         ingredientRV = findViewById(R.id.idRVIngredient);
         loadingPB = findViewById(R.id.idProgressBarIngredient);
+        deleteModeBtn = findViewById(R.id.idBtnIngredientDeleteMode);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -59,7 +67,7 @@ public class ViewIngredient extends AppCompatActivity{
         ingredientRV.setHasFixedSize(true);
         ingredientRV.setLayoutManager(new LinearLayoutManager(this));
 
-        ingredientRVAdapter = new IngredientRVAdapter(ingredientArrayList, this);
+        ingredientRVAdapter = new IngredientRVAdapter(ingredientArrayList, this, this);
 
         ingredientRV.setAdapter(ingredientRVAdapter);
 
@@ -113,5 +121,29 @@ public class ViewIngredient extends AppCompatActivity{
                 startActivity(i);
             }
         });
+
+        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchDeleteMode();
+                Toast.makeText(getApplicationContext(), "Delete mode activated", Toast.LENGTH_SHORT).show();
+                refreshForDeleteMode();
+            }
+        });
+    }
+
+    private void switchDeleteMode() {
+        if (getDeleteMode()) {
+            setDeleteMode(false);
+        } else setDeleteMode(true);
+    }
+
+    private void refreshForDeleteMode() {
+        IngredientRVAdapter adapter = new IngredientRVAdapter(ingredientArrayList, this, this);
+        ingredientRV.setAdapter(adapter);
+    }
+
+    public void deleteIngredient(String ingredientName) {
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").document("" + ingredientName).delete();
     }
 }
