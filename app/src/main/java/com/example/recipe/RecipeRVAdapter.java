@@ -45,9 +45,8 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
     public void onBindViewHolder(@NonNull RecipeRVAdapter.RecipeViewHolder holder, int position) {
         // setting data to our text views from our modal class.
         Recipe recipes = recipesArrayList.get(position);
-        holder.ingredientTV.setText("");
         holder.recipeNameTV.setText("Name: " + recipes.getName());
-        holder.deleteBtn.setText("DELETE RECIPE");
+        holder.deleteBtn.setText("DELETE");
     }
 
     @Override
@@ -58,7 +57,6 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
 
     class RecipeViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our text views.
-        private final TextView ingredientTV;
         private final TextView recipeNameTV;
         private Button deleteBtn;
 
@@ -90,7 +88,6 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our text views.
-            ingredientTV = itemView.findViewById(R.id.idTVIngredient);
             recipeNameTV = itemView.findViewById(R.id.idTVRecipeName);
             deleteBtn = itemView.findViewById(R.id.idBtnRecipeDelete);
             if (upper.getDeleteMode()) {

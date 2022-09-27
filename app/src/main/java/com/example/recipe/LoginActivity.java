@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -91,6 +92,12 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                     }
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressbar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
             }
         });
     }
