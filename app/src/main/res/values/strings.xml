@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Recipe</string>
     <string name="ingredient">Ingredient</string>
+    <string name="show_dialog">Show Dialog</string>
+    <string name="confirm">Confirm</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

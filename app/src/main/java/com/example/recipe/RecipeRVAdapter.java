@@ -1,5 +1,6 @@
 package com.example.recipe;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
@@ -65,6 +67,26 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
             return erg.substring(6);
         }
 
+        private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+            alert.setTitle("Delete");
+            alert.setMessage("Are you sure?");
+            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    upper.deleteRecipe(convertRecipeNameTV(toDeleteTV));
+                }
+            });
+
+            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            alert.show();
+        }
+
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our text views.
@@ -74,6 +96,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
             if (upper.getDeleteMode()) {
                 deleteBtn.setVisibility(View.VISIBLE);
             }
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -84,6 +107,16 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
                     Intent in = new Intent(context, ViewIngredient.class);
                     in.putExtras(b);
                     upper.startIngredientIntent(in);
+                }
+            });
+
+
+
+            //calls function to delete Recipe in ViewRecipe class
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DeleteButtonAlert_OnClick(view, recipeNameTV);
                 }
             });
         }

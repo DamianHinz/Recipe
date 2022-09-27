@@ -14,9 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -142,6 +146,28 @@ public class ViewRecipe extends AppCompatActivity {
         if (getDeleteMode()) {
             setDeleteMode(false);
         } else setDeleteMode(true);
+    }
+
+    //function to delete Recipe called in RecipeViewHolder
+    public void deleteRecipe(String recipeName) {
+        DocumentReference recipeDocRef = db.collection("Users").document(currentUid).collection("Recipe").document("" + recipeName);
+
+        //Delete all Ingredient Documents
+        recipeDocRef.collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    int count = list.size();
+                    for (int i = 1;i <= count;i++) {
+                        recipeDocRef.collection("Ingredients").document("" + i).delete();
+                    }
+                }
+            }
+        });
+
+        //Delete Recipe Document
+        recipeDocRef.delete();
     }
 }
 
