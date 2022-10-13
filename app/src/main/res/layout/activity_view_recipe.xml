@@ -27,7 +27,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_margin="10dp"
-        android:text="DELETE MODE"
+        android:text="EDIT MODE"
         android:textAllCaps="false" />
 
 </RelativeLayout>
