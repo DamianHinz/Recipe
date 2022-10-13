@@ -143,7 +143,22 @@ public class ViewIngredient extends AppCompatActivity{
         ingredientRV.setAdapter(adapter);
     }
 
-    public void deleteIngredient(String ingredientName) {
-        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").document("" + ingredientName).delete();
+    public void deleteIngredient(String ingredientDataNumber) {
+        //deletes selected ingredient;
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").document("" + ingredientDataNumber).delete();
+
+        //updates ingredient count;
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Recipe recipe = documentSnapshot.toObject(Recipe.class);
+                int oldCount = recipe.getIngredientCount();
+                int oldDeleteCount = recipe.getDeleteCount();
+                if (oldCount <= 0) return;
+                else recipe.setIngredientCount(oldCount - 1);
+                recipe.setDeleteCount(oldDeleteCount + 1);
+                db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).set(recipe);
+            }
+        });
     }
 }

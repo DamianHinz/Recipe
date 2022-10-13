@@ -4,15 +4,17 @@ public class Ingredient {
     private String name;
     private String unit;
     private double amount;
+    private int dataNumber;
 
     public Ingredient() {
 
     }
 
-    public Ingredient(String name, String unit, double amount) {
+    public Ingredient(String name, String unit, double amount, int dataNumber) {
         this.name = name;
         this.unit = unit;
         this.amount = amount;
+        this.dataNumber = dataNumber;
     }
 
     public String getName() {
@@ -38,6 +40,10 @@ public class Ingredient {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public int getDataNumber() { return dataNumber; }
+
+    public void setDataNumber(int dataNumber) { this.dataNumber = dataNumber; }
 
     @Override
     public String toString(){

@@ -50,13 +50,11 @@ public class AddIngredientsActivity extends AppCompatActivity{
     //gets clicked Recipe to access ingredient count
     private void addIngredientToFirestore(Recipe recipe) {
 
-
-
-        Ingredient ingredient = new Ingredient(ingredientName, ingredientUnit, ingredientAmount);
-
         CollectionReference dbRecipeIngredients = db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients");
 
-        String nextIngredientNum = String.valueOf(recipe.getIngredientCount() + 1);
+        String nextIngredientNum = String.valueOf(recipe.getIngredientCount() + 1 + recipe.getDeleteCount());
+        Ingredient ingredient = new Ingredient(ingredientName, ingredientUnit, ingredientAmount, Integer.parseInt(nextIngredientNum));
+
         DocumentReference docIdRef = dbRecipeIngredients.document("" + nextIngredientNum);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -88,6 +86,10 @@ public class AddIngredientsActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    public int getNextFreeIngredient () {
+        return 0;
     }
 
     public void incrementIngredientCount(Recipe recipe) {
@@ -130,7 +132,6 @@ public class AddIngredientsActivity extends AppCompatActivity{
             public void onClick(View v) {
                 ingredientName = ingredientNameEdt.getText().toString();
                 ingredientAmountStr = ingredientAmountEdt.getText().toString();
-                //ingredientAmount = Double.parseDouble(ingredientAmountEdt.getText().toString());
                 ingredientUnit = ingredientUnitEdt.getText().toString();
 
                 //to check if some fields are empty

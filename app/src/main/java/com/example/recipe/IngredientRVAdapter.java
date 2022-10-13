@@ -39,7 +39,7 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     public void onBindViewHolder(@NonNull IngredientRVAdapter.IngredientViewHolder holderIn, int position) {
         Ingredient ingredients = ingredientArrayList.get(position);
         holderIn.ingredientTV.setText((position + 1) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
-
+        holderIn.ingredientDataNumber = ingredients.getDataNumber();
     }
 
     @Override
@@ -51,20 +51,21 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
         // creating variables for our text views.
         private final TextView ingredientTV;
         private Button deleteBtn;
+        int ingredientDataNumber;
 
         public String convertIngredientNameTV (TextView nameTV) {
             String[] erg = nameTV.getText().toString().split(":");
             return erg[0];
         }
 
-        private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV) {
+        private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV, int ingredientDataNumber) {
             AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
             alert.setTitle("Delete");
             alert.setMessage("Are you sure?");
             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    upper.deleteIngredient(convertIngredientNameTV(toDeleteTV));
+                    upper.deleteIngredient(String.valueOf(ingredientDataNumber));
                 }
             });
 
@@ -89,7 +90,8 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DeleteButtonAlert_OnClick(view, ingredientTV);
+                    System.out.println("\n" + ingredientDataNumber + "\n");
+                    DeleteButtonAlert_OnClick(view, ingredientTV, ingredientDataNumber);
                 }
             });
 

@@ -45,7 +45,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         CollectionReference dbRecipe = db.collection("Users").document(currentUid).collection("Recipe");
 
         //adding data to recipe object class
-        Recipe recipe = new Recipe(recipeName, 0);
+        Recipe recipe = new Recipe(recipeName, 0, 0);
 
         DocumentReference docIdRef = db.collection("Users").document(currentUid).collection("Recipe").document(recipeName);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

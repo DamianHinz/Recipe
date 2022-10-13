@@ -159,8 +159,18 @@ public class ViewRecipe extends AppCompatActivity {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     int count = list.size();
-                    for (int i = 1;i <= count;i++) {
-                        recipeDocRef.collection("Ingredients").document("" + i).delete();
+
+                    //debug
+                    /*
+                    for(int j = 0;j < count; j++) {
+                        System.out.println(list.get(j).toString());
+                    } */
+
+                    //creates array of saved ingredient numbers to delete
+                    int ingredientNumbers[] = ingredientDataNumber(list);
+
+                    for (int i = 0;i < count;i++) {
+                        recipeDocRef.collection("Ingredients").document("" + ingredientNumbers[i]).delete();
                     }
                 }
             }
@@ -168,6 +178,15 @@ public class ViewRecipe extends AppCompatActivity {
 
         //Delete Recipe Document
         recipeDocRef.delete();
+    }
+    public int[] ingredientDataNumber(List<DocumentSnapshot> list) {
+        int count = list.size();
+        int ingredientNumbers[] = new int[count];
+        for (int j = 0; j < ingredientNumbers.length; j++) {
+            String[] listArray = list.get(j).toString().split("/");
+            ingredientNumbers[j] = Integer.valueOf(listArray[5].substring(0,1));
+        }
+        return ingredientNumbers;
     }
 }
 
