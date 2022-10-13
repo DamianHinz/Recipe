@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ViewRecipe extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class ViewRecipe extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUid;
-    private Button deleteModeBtn;
+    private Button deleteModeBtn, randomRecipeBtn;
     ProgressBar loadingPB;
 
     private boolean deleteMode = false;
@@ -64,6 +65,7 @@ public class ViewRecipe extends AppCompatActivity {
         recipeRV = findViewById(R.id.idRVRecipes);
         loadingPB = findViewById(R.id.idProgressBar);
         deleteModeBtn = findViewById(R.id.idBtnRecipeDeleteMode);
+        randomRecipeBtn = findViewById(R.id.idBtnRecipeRandom);
 
         // initializing our variable for firebase
         // firestore and getting its instance.
@@ -133,6 +135,25 @@ public class ViewRecipe extends AppCompatActivity {
                 switchDeleteMode();
                 Toast.makeText(getApplicationContext(),"Delete mode activated", Toast.LENGTH_LONG).show();
                 refreshForDeleteMode();
+            }
+        });
+
+        randomRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int recipeCount = recipesArrayList.size();
+                Random rand = new Random();
+                int randInt = rand.nextInt(recipeCount);
+                String randRecipeName = recipesArrayList.get(randInt).getName();
+
+
+                //creates a Bundle with the Name of the clicked recipe
+                Bundle b = new Bundle();
+                b.putString("clickedRecipe", randRecipeName);
+                //Starts new activity to show ingredients of clicked recipe
+                Intent in = new Intent(getApplicationContext(), ViewIngredient.class);
+                in.putExtras(b);
+                startIngredientIntent(in);
             }
         });
     }

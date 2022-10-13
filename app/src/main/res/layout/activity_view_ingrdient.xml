@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/idBtnToAddIngredient"
-        android:layout_width="89dp"
+        android:layout_width="90dp"
         android:layout_height="75dp"
         android:layout_above="@id/idBtnIngredientDeleteMode"
         android:layout_alignRight="@id/idRVIngredient"
@@ -44,8 +44,8 @@
 
     <Button
         android:id="@+id/idBtnIngredientDeleteMode"
-        android:layout_width="91dp"
-        android:layout_height="62dp"
+        android:layout_width="90dp"
+        android:layout_height="60dp"
         android:layout_alignRight="@id/idRVIngredient"
         android:layout_alignBottom="@id/idRVIngredient"
         android:layout_marginLeft="5dp"
