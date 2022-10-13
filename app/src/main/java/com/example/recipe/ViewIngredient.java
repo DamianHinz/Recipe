@@ -3,6 +3,7 @@ package com.example.recipe;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 import android.content.Intent;
@@ -22,11 +23,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewIngredient extends AppCompatActivity{
     private RecyclerView ingredientRV;
+    private TextView recipeDescriptionTV;
     private ArrayList ingredientArrayList;
     private IngredientRVAdapter ingredientRVAdapter;
     private String recipeName, currentUid;
@@ -57,6 +61,7 @@ public class ViewIngredient extends AppCompatActivity{
         ingredientRV = findViewById(R.id.idRVIngredient);
         loadingPB = findViewById(R.id.idProgressBarIngredient);
         deleteModeBtn = findViewById(R.id.idBtnIngredientDeleteMode);
+        //recipeDescriptionTV = findViewById(R.id.idTVRecipeDescription);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -78,6 +83,46 @@ public class ViewIngredient extends AppCompatActivity{
         }
 
         //getting Data from Database
+        initializeRecipeDescription();
+        initializeArrayList();
+
+        toAddIngredientBtn = findViewById(R.id.idBtnToAddIngredient);
+
+        toAddIngredientBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V) {
+                //Creates Bundle with clicked recipe name.
+                Bundle b = new Bundle();
+                b.putString("clickedRecipe", getRecipeName());
+
+                Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
+        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchDeleteMode();
+                Toast.makeText(getApplicationContext(), "Delete mode activated", Toast.LENGTH_SHORT).show();
+                refreshForDeleteMode();
+            }
+        });
+    }
+
+    //Returns recipe description as name in ingredient class.
+    private void initializeRecipeDescription() {
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Recipe recipe = documentSnapshot.toObject(Recipe.class);
+                ingredientArrayList.add(new Ingredient(recipe.getDescription(), "", -1.0, -1));
+            }
+        });
+    }
+
+    private void initializeArrayList() {
         db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -104,30 +149,6 @@ public class ViewIngredient extends AppCompatActivity{
             public void onFailure(@NonNull Exception e) {
                 //if we dont get any Data or an error
                 Toast.makeText(ViewIngredient.this, "Fail to get Data", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        toAddIngredientBtn = findViewById(R.id.idBtnToAddIngredient);
-
-        toAddIngredientBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View V) {
-                //Creates Bundle with clicked recipe name.
-                Bundle b = new Bundle();
-                b.putString("clickedRecipe", getRecipeName());
-
-                Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
-                i.putExtras(b);
-                startActivity(i);
-            }
-        });
-
-        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchDeleteMode();
-                Toast.makeText(getApplicationContext(), "Delete mode activated", Toast.LENGTH_SHORT).show();
-                refreshForDeleteMode();
             }
         });
     }

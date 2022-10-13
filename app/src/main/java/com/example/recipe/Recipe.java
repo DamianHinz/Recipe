@@ -10,6 +10,7 @@ public class Recipe {
     private String name;
     private int ingredientCount;
     private int deleteCount;
+    private String description;
 
 
 
@@ -18,10 +19,11 @@ public class Recipe {
     }
 
 
-    public Recipe(String name, int ingredientCount, int deleteCount) {
+    public Recipe(String name, int ingredientCount, int deleteCount, String description) {
         this.name = name;
         this.ingredientCount = ingredientCount;
         this.deleteCount = deleteCount;
+        this.description = description;
     }
 
     public int getIngredientCount() { return ingredientCount; }
@@ -35,6 +37,10 @@ public class Recipe {
     public int getDeleteCount() { return deleteCount; }
 
     public void setDeleteCount(int deleteCount) { this.deleteCount = deleteCount; }
+
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
 
     @Override
     public String toString() {

@@ -6,6 +6,8 @@
     android:id="@+id/firstLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:overScrollMode="always"
     tools:context=".ViewRecipe">
 
     <!--Recycler view for displaying
@@ -25,38 +27,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
-    <LinearLayout
-        android:id="@+id/secondLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:weightSum="1">
 
-    </LinearLayout>
 
     <Button
         android:id="@+id/idBtnToAddIngredient"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="89dp"
+        android:layout_height="75dp"
         android:layout_above="@id/idBtnIngredientDeleteMode"
+        android:layout_alignRight="@id/idRVIngredient"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginBottom="-3dp"
         android:layout_weight="1"
-        android:text="Add Ingredient"
+        android:text="Add"
         android:textAllCaps="false" />
 
     <Button
         android:id="@+id/idBtnIngredientDeleteMode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="91dp"
+        android:layout_height="62dp"
+        android:layout_alignRight="@id/idRVIngredient"
         android:layout_alignBottom="@id/idRVIngredient"
-        android:layout_weight="1"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_weight="1"
         android:text="DELETE MODE"
-        android:visibility="visible"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:visibility="visible" />
 
 </RelativeLayout>
 

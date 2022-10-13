@@ -38,7 +38,11 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     @Override
     public void onBindViewHolder(@NonNull IngredientRVAdapter.IngredientViewHolder holderIn, int position) {
         Ingredient ingredients = ingredientArrayList.get(position);
-        holderIn.ingredientTV.setText((position + 1) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
+        if (position == 0) {
+            holderIn.ingredientTV.setText(ingredients.getName());
+        } else {
+            holderIn.ingredientTV.setText((position) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
+        }
         holderIn.ingredientDataNumber = ingredients.getDataNumber();
     }
 
@@ -53,12 +57,8 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
         private Button deleteBtn;
         int ingredientDataNumber;
 
-        public String convertIngredientNameTV (TextView nameTV) {
-            String[] erg = nameTV.getText().toString().split(":");
-            return erg[0];
-        }
 
-        private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV, int ingredientDataNumber) {
+        private void DeleteButtonAlert_OnClick(View view, int ingredientDataNumber) {
             AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
             alert.setTitle("Delete");
             alert.setMessage("Are you sure?");
@@ -90,8 +90,8 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    System.out.println("\n" + ingredientDataNumber + "\n");
-                    DeleteButtonAlert_OnClick(view, ingredientTV, ingredientDataNumber);
+                    if (ingredientDataNumber < 0) return;
+                    DeleteButtonAlert_OnClick(view, ingredientDataNumber);
                 }
             });
 

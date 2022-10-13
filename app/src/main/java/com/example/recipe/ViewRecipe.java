@@ -160,12 +160,6 @@ public class ViewRecipe extends AppCompatActivity {
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     int count = list.size();
 
-                    //debug
-                    /*
-                    for(int j = 0;j < count; j++) {
-                        System.out.println(list.get(j).toString());
-                    } */
-
                     //creates array of saved ingredient numbers to delete
                     int ingredientNumbers[] = ingredientDataNumber(list);
 
@@ -178,6 +172,7 @@ public class ViewRecipe extends AppCompatActivity {
 
         //Delete Recipe Document
         recipeDocRef.delete();
+        refreshForDeleteMode();
     }
     public int[] ingredientDataNumber(List<DocumentSnapshot> list) {
         int count = list.size();

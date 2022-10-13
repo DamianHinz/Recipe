@@ -26,11 +26,11 @@ import java.util.ArrayList;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
-    private EditText  recipeNameEdt;
+    private EditText  recipeNameEdt, recipeDescriptionEdt;
 
     private Button submitRecipeBtn;
 
-    private String recipeName;
+    private String recipeName, recipeDescription;
 
     private FirebaseFirestore db;
 
@@ -45,7 +45,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         CollectionReference dbRecipe = db.collection("Users").document(currentUid).collection("Recipe");
 
         //adding data to recipe object class
-        Recipe recipe = new Recipe(recipeName, 0, 0);
+        Recipe recipe = new Recipe(recipeName, 0, 0, recipeDescription);
 
         DocumentReference docIdRef = db.collection("Users").document(currentUid).collection("Recipe").document(recipeName);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -86,8 +86,9 @@ public class AddRecipeActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         recipeNameEdt = findViewById(R.id.idEdtRecipeName);
-        submitRecipeBtn = findViewById(R.id.idBtnSubmitRecipe);
+        recipeDescriptionEdt = findViewById(R.id.idEdtRecipeDescription);
 
+        submitRecipeBtn = findViewById(R.id.idBtnSubmitRecipe);
 
         //adding on click listener for button
         submitRecipeBtn.setOnClickListener(new View.OnClickListener() {
@@ -95,10 +96,13 @@ public class AddRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //getting Data from edittext field
                 recipeName = recipeNameEdt.getText().toString();
+                recipeDescription = recipeDescriptionEdt.getText().toString();
 
                 //check if text field is empty
                 if (TextUtils.isEmpty(recipeName)) {
                     recipeNameEdt.setError("Please enter recipe Name");
+                } else if (TextUtils.isEmpty(recipeDescription)) {
+                    recipeDescriptionEdt.setError("Please enter recipe description");
                 } else {
                     //calling function to add data to Firebase Firestore
                     addDataToFirestore();

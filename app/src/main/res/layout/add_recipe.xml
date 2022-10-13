@@ -19,6 +19,17 @@
         android:importantForAutofill="no"
         android:inputType="text" />
 
+    <EditText
+        android:id="@+id/idEdtRecipeDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:hint="Recipe Description"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine" />
+
     <!--Button for adding your Recipe to Firebase-->
     <Button
         android:id="@+id/idBtnSubmitRecipe"
