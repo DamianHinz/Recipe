@@ -36,7 +36,7 @@ public class ViewIngredient extends AppCompatActivity{
     private String recipeName, currentUid;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private Button toAddIngredientBtn, deleteModeBtn;
+    private Button toAddIngredientBtn;
     ProgressBar loadingPB;
 
     private Boolean deleteMode = false;
@@ -60,8 +60,6 @@ public class ViewIngredient extends AppCompatActivity{
         //initializing variables
         ingredientRV = findViewById(R.id.idRVIngredient);
         loadingPB = findViewById(R.id.idProgressBarIngredient);
-        deleteModeBtn = findViewById(R.id.idBtnIngredientDeleteMode);
-        //recipeDescriptionTV = findViewById(R.id.idTVRecipeDescription);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -83,7 +81,6 @@ public class ViewIngredient extends AppCompatActivity{
         }
 
         //getting Data from Database
-        initializeRecipeDescription();
         initializeArrayList();
 
         toAddIngredientBtn = findViewById(R.id.idBtnToAddIngredient);
@@ -100,27 +97,8 @@ public class ViewIngredient extends AppCompatActivity{
                 startActivity(i);
             }
         });
-
-        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchDeleteMode();
-                Toast.makeText(getApplicationContext(), "Delete mode activated", Toast.LENGTH_SHORT).show();
-                refreshForDeleteMode();
-            }
-        });
     }
 
-    //Returns recipe description as name in ingredient class.
-    private void initializeRecipeDescription() {
-        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Recipe recipe = documentSnapshot.toObject(Recipe.class);
-                ingredientArrayList.add(new Ingredient(recipe.getDescription(), "", -1.0, -1));
-            }
-        });
-    }
 
     private void initializeArrayList() {
         db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -153,10 +131,12 @@ public class ViewIngredient extends AppCompatActivity{
         });
     }
 
-    private void switchDeleteMode() {
+    public void switchDeleteMode() {
         if (getDeleteMode()) {
             setDeleteMode(false);
         } else setDeleteMode(true);
+        Toast.makeText(getApplicationContext(), "Delete mode activated", Toast.LENGTH_SHORT).show();
+        refreshForDeleteMode();
     }
 
     private void refreshForDeleteMode() {
@@ -181,5 +161,6 @@ public class ViewIngredient extends AppCompatActivity{
                 db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).set(recipe);
             }
         });
+        refreshForDeleteMode();
     }
 }

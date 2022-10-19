@@ -28,33 +28,60 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
         this.upper = upper;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return (position == ingredientArrayList.size()) ? R.layout.button_item : R.layout.ingredient_item;
+    }
+
     @NonNull
     @Override
     public IngredientRVAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // passing our layout file for displaying our card item
-        return new IngredientRVAdapter.IngredientViewHolder(LayoutInflater.from(context).inflate(R.layout.ingredient_item, parent, false));
+        View itemView;
+        if ( viewType == R.layout.ingredient_item ) {
+            itemView = LayoutInflater.from(context).inflate(R.layout.ingredient_item, parent, false);
+        } else {
+            itemView = LayoutInflater.from(context).inflate(R.layout.button_item, parent, false);
+        }
+        return new IngredientRVAdapter.IngredientViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull IngredientRVAdapter.IngredientViewHolder holderIn, int position) {
-        Ingredient ingredients = ingredientArrayList.get(position);
-        if (position == 0) {
-            holderIn.ingredientTV.setText(ingredients.getName());
+
+        if (position == ingredientArrayList.size()) {
+            holderIn.editModeBtn.setText("Edit Mode");
+            holderIn.editModeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    upper.switchDeleteMode();
+                }
+            });
         } else {
-            holderIn.ingredientTV.setText((position) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
+            Ingredient ingredients = ingredientArrayList.get(position);
+            holderIn.ingredientTV.setText((position + 1) + ": " + ingredients.getName() + " " + ingredients.getAmount() + " " + ingredients.getUnit());
+            holderIn.ingredientDataNumber = ingredients.getDataNumber();
+            if (upper.getDeleteMode()) {
+                holderIn.deleteBtn.setVisibility(View.VISIBLE);
+            }
+            holderIn.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holderIn.DeleteButtonAlert_OnClick(view, holderIn.ingredientDataNumber);
+                }
+            });
         }
-        holderIn.ingredientDataNumber = ingredients.getDataNumber();
     }
 
     @Override
     public int getItemCount() {
-        return ingredientArrayList.size();
+        return ingredientArrayList.size() + 1;
     }
 
     class IngredientViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our text views.
         private final TextView ingredientTV;
-        private Button deleteBtn;
+        private Button deleteBtn, editModeBtn;
         int ingredientDataNumber;
 
 
@@ -83,18 +110,7 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
             // initializing our text views.
             ingredientTV = itemView.findViewById(R.id.idTVIngredientItem);
             deleteBtn = itemView.findViewById(R.id.idBtnIngredientDelete);
-            if (upper.getDeleteMode()) {
-                deleteBtn.setVisibility(View.VISIBLE);
-            }
-
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (ingredientDataNumber < 0) return;
-                    DeleteButtonAlert_OnClick(view, ingredientDataNumber);
-                }
-            });
-
+            editModeBtn = itemView.findViewById(R.id.idBtnForRecycler);
         }
     }
 }
