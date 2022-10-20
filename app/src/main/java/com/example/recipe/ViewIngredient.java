@@ -94,6 +94,8 @@ public class ViewIngredient extends AppCompatActivity{
             }
         });
 
+        this.setTitle(getRecipeName());
+
         //getting Data from Database
         initializeArrayList();
     }

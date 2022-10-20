@@ -34,59 +34,122 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         this.upper = upper;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position < recipesArrayList.size()) return R.layout.recipe_item;
+        else return R.layout.button_item;
+    }
+
     @NonNull
     @Override
     public RecipeRVAdapter.RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // passing our layout file for displaying our card item
-        return new RecipeViewHolder(LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false));
+        View itemView;
+        if (viewType == R.layout.recipe_item) itemView = LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false);
+        else itemView = LayoutInflater.from(context).inflate(R.layout.button_item, parent, false);
+
+        return new RecipeViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeRVAdapter.RecipeViewHolder holder, int position) {
         // setting data to our text views from our modal class.
-        Recipe recipes = recipesArrayList.get(position);
-        holder.recipeNameTV.setText("Name: " + recipes.getName());
-        holder.deleteBtn.setText("DELETE");
-        holder.editBtn.setText("EDIT");
-        holder.recipeDescription = recipes.getDescription();
+        if (position == recipesArrayList.size()) {
+            holder.utilityBtn.setText("Random Recipe");
+            holder.utilityBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    upper.randomRecipeButtonClicked();
+                }
+            });
+        } else if (position == recipesArrayList.size() + 1) {
+            holder.utilityBtn.setText("Edit Mode");
+            holder.utilityBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    upper.deleteModeBtnClicked();
+                }
+            });
+        } else {
+            Recipe recipes = recipesArrayList.get(position);
+            holder.recipeNameTV.setText("Name: " + recipes.getName());
+            holder.deleteBtn.setText("DELETE");
+            holder.editBtn.setText("EDIT");
+            holder.recipeDescription = recipes.getDescription();
+            //calls function to delete Recipe in ViewRecipe class
+            holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DeleteButtonAlert_OnClick(view, holder.recipeNameTV);
+                }
+            });
+            if (upper.getDeleteMode()) {
+                holder.deleteBtn.setVisibility(View.VISIBLE);
+                holder.editBtn.setVisibility(View.VISIBLE);
+            }
+            holder.editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle b = new Bundle();
+                    b.putString("clickedRecipe", convertRecipeNameTV(holder.recipeNameTV));
+                    Intent in = new Intent(context, EditRecipeDescriptionActivity.class);
+                    in.putExtras(b);
+                    upper.startIngredientIntent(in);
+                }
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //creates a Bundle with the Name of the clicked recipe
+                    Bundle b = new Bundle();
+                    b.putString("clickedRecipe", convertRecipeNameTV(holder.recipeNameTV));
+                    b.putString("recipeDescription", holder.recipeDescription);
+                    //Starts new activity to show ingredients of clicked recipe
+                    Intent in = new Intent(context, ViewIngredient.class);
+                    in.putExtras(b);
+                    upper.startIngredientIntent(in);
+                }
+            });
+        }
+    }
+
+    public String convertRecipeNameTV (TextView nameTV) {
+        String erg = nameTV.getText().toString();
+        return erg.substring(6);
+    }
+
+    private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+        alert.setTitle("Delete");
+        alert.setMessage("Are you sure?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                upper.deleteRecipe(convertRecipeNameTV(toDeleteTV));
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        alert.show();
     }
 
     @Override
     public int getItemCount() {
         // returning the size of our array list.
-        return recipesArrayList.size();
+        return recipesArrayList.size() + 2;
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our text views.
         private final TextView recipeNameTV;
-        private Button deleteBtn, editBtn;
+        private Button deleteBtn, editBtn, utilityBtn;
         private String recipeDescription;
-
-        public String convertRecipeNameTV (TextView nameTV) {
-            String erg = nameTV.getText().toString();
-            return erg.substring(6);
-        }
-
-        private void DeleteButtonAlert_OnClick(View view, TextView toDeleteTV) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
-            alert.setTitle("Delete");
-            alert.setMessage("Are you sure?");
-            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    upper.deleteRecipe(convertRecipeNameTV(toDeleteTV));
-                }
-            });
-
-            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            alert.show();
-        }
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,47 +157,9 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
             recipeNameTV = itemView.findViewById(R.id.idTVRecipeName);
             deleteBtn = itemView.findViewById(R.id.idBtnRecipeDelete);
             editBtn = itemView.findViewById(R.id.idBtnRecipeEdit);
-
-            if (upper.getDeleteMode()) {
-                deleteBtn.setVisibility(View.VISIBLE);
-                editBtn.setVisibility(View.VISIBLE);
-            }
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //creates a Bundle with the Name of the clicked recipe
-                    Bundle b = new Bundle();
-                    b.putString("clickedRecipe", convertRecipeNameTV(recipeNameTV));
-                    b.putString("recipeDescription", recipeDescription);
-                    //Starts new activity to show ingredients of clicked recipe
-                    Intent in = new Intent(context, ViewIngredient.class);
-                    in.putExtras(b);
-                    upper.startIngredientIntent(in);
-                }
-            });
+            utilityBtn = itemView.findViewById(R.id.idBtnForRecycler);
 
 
-
-            //calls function to delete Recipe in ViewRecipe class
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DeleteButtonAlert_OnClick(view, recipeNameTV);
-                }
-            });
-
-            editBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle b = new Bundle();
-                    b.putString("clickedRecipe", convertRecipeNameTV(recipeNameTV));
-                    Intent in = new Intent(context, EditRecipeDescriptionActivity.class);
-                    in.putExtras(b);
-                    upper.startIngredientIntent(in);
-                }
-            });
         }
-
     }
 }

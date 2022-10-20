@@ -21,25 +21,4 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <Button
-        android:id="@+id/idBtnRecipeRandom"
-        android:layout_width="95dp"
-        android:layout_height="60dp"
-        android:layout_alignRight="@+id/idRVRecipes"
-        android:layout_above="@id/idBtnRecipeDeleteMode"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="Random"
-        android:textAllCaps="false" />
-    <Button
-        android:id="@+id/idBtnRecipeDeleteMode"
-        android:layout_width="95dp"
-        android:layout_height="60dp"
-        android:layout_alignRight="@+id/idRVRecipes"
-        android:layout_alignBottom="@+id/idRVRecipes"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="EDIT MODE"
-        android:textAllCaps="true" />
-
 </RelativeLayout>

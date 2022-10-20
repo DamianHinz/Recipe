@@ -40,7 +40,6 @@ public class ViewRecipe extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUid;
-    private Button deleteModeBtn, randomRecipeBtn;
     ProgressBar loadingPB;
 
     private boolean deleteMode = false;
@@ -64,8 +63,6 @@ public class ViewRecipe extends AppCompatActivity {
         // initializing our variables.
         recipeRV = findViewById(R.id.idRVRecipes);
         loadingPB = findViewById(R.id.idProgressBar);
-        deleteModeBtn = findViewById(R.id.idBtnRecipeDeleteMode);
-        randomRecipeBtn = findViewById(R.id.idBtnRecipeRandom);
 
         // initializing our variable for firebase
         // firestore and getting its instance.
@@ -128,33 +125,29 @@ public class ViewRecipe extends AppCompatActivity {
                 Toast.makeText(ViewRecipe.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        deleteModeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchDeleteMode();
-                Toast.makeText(getApplicationContext(),"Delete mode activated", Toast.LENGTH_LONG).show();
-                refreshForDeleteMode();
-            }
-        });
+    public void randomRecipeButtonClicked() {
+        int recipeCount = recipesArrayList.size();
+        Random rand = new Random();
+        int randInt = rand.nextInt(recipeCount);
+        String randRecipeName = recipesArrayList.get(randInt).getName();
+        String randRecipeDescription = recipesArrayList.get(randInt).getDescription();
 
-        randomRecipeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int recipeCount = recipesArrayList.size();
-                Random rand = new Random();
-                int randInt = rand.nextInt(recipeCount);
-                String randRecipeName = recipesArrayList.get(randInt).getName();
+        //bundle with random recipe name
+        Bundle b = new Bundle();
+        b.putString("clickedRecipe", randRecipeName);
+        b.putString("recipeDescription", randRecipeDescription);
+        //Starts new activity to show ingredients of random recipe
+        Intent in = new Intent(getApplicationContext(), ViewIngredient.class);
+        in.putExtras(b);
+        startIngredientIntent(in);
+    }
 
-                //bundle with random recipe name
-                Bundle b = new Bundle();
-                b.putString("clickedRecipe", randRecipeName);
-                //Starts new activity to show ingredients of random recipe
-                Intent in = new Intent(getApplicationContext(), ViewIngredient.class);
-                in.putExtras(b);
-                startIngredientIntent(in);
-            }
-        });
+    public void deleteModeBtnClicked() {
+        switchDeleteMode();
+        Toast.makeText(getApplicationContext(),"Delete mode activated", Toast.LENGTH_LONG).show();
+        refreshForDeleteMode();
     }
 
     private void refreshForDeleteMode() {
