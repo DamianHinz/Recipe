@@ -146,11 +146,10 @@ public class ViewRecipe extends AppCompatActivity {
                 int randInt = rand.nextInt(recipeCount);
                 String randRecipeName = recipesArrayList.get(randInt).getName();
 
-
-                //creates a Bundle with the Name of the clicked recipe
+                //bundle with random recipe name
                 Bundle b = new Bundle();
                 b.putString("clickedRecipe", randRecipeName);
-                //Starts new activity to show ingredients of clicked recipe
+                //Starts new activity to show ingredients of random recipe
                 Intent in = new Intent(getApplicationContext(), ViewIngredient.class);
                 in.putExtras(b);
                 startIngredientIntent(in);

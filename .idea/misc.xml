@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/drawable/ic__5428552791649833041.xml" value="0.1495" />
+        <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/drawable/ic_cooking.xml" value="0.134" />
+        <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1495" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/activity_dashboard.xml" value="0.1921875" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/activity_login.xml" value="0.2341485507246377" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/activity_main.xml" value="0.14722222222222223" />
@@ -11,6 +14,8 @@
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/activity_view_recipe.xml" value="0.297554347826087" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/add_ingredients.xml" value="0.17831813576494426" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/add_recipe.xml" value="0.297554347826087" />
+        <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/button_item.xml" value="0.25" />
+        <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/description_item.xml" value="0.25" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/ingredient_item.xml" value="0.2578125" />
         <entry key="..\:/Programmieren/Rezepte/Recipe/app/src/main/res/layout/recipe_item.xml" value="0.25" />
       </map>

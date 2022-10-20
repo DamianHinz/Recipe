@@ -48,6 +48,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         holder.recipeNameTV.setText("Name: " + recipes.getName());
         holder.deleteBtn.setText("DELETE");
         holder.editBtn.setText("EDIT");
+        holder.recipeDescription = recipes.getDescription();
     }
 
     @Override
@@ -60,6 +61,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
         // creating variables for our text views.
         private final TextView recipeNameTV;
         private Button deleteBtn, editBtn;
+        private String recipeDescription;
 
         public String convertRecipeNameTV (TextView nameTV) {
             String erg = nameTV.getText().toString();
@@ -104,6 +106,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.Recipe
                     //creates a Bundle with the Name of the clicked recipe
                     Bundle b = new Bundle();
                     b.putString("clickedRecipe", convertRecipeNameTV(recipeNameTV));
+                    b.putString("recipeDescription", recipeDescription);
                     //Starts new activity to show ingredients of clicked recipe
                     Intent in = new Intent(context, ViewIngredient.class);
                     in.putExtras(b);

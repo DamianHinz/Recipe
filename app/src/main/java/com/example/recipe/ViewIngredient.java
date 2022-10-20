@@ -13,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,10 +35,10 @@ public class ViewIngredient extends AppCompatActivity{
     private TextView recipeDescriptionTV;
     private ArrayList ingredientArrayList;
     private IngredientRVAdapter ingredientRVAdapter;
-    private String recipeName, currentUid;
+    private String recipeName, currentUid, recipeDescription;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private Button toAddIngredientBtn;
+    Recipe recipe;
     ProgressBar loadingPB;
 
     private Boolean deleteMode = false;
@@ -50,6 +52,10 @@ public class ViewIngredient extends AppCompatActivity{
     public void setRecipeName(String recipeName) {
         this.recipeName = recipeName;
     }
+
+    public String getRecipeDescription() {return this.recipeDescription; }
+
+    public void setRecipeDescription(String recipeDescription) {this.recipeDescription = recipeDescription; }
 
     @Override
     protected void onCreate(Bundle saveInstanceState) {
@@ -78,25 +84,27 @@ public class ViewIngredient extends AppCompatActivity{
         Bundle b = getIntent().getExtras();
         if(b != null) {
             setRecipeName(b.getString("clickedRecipe"));
+            setRecipeDescription(b.getString("recipeDescription"));
         }
+
+        db.collection("Users").document(currentUid).collection("Recipe").document("" + getRecipeName()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                recipe = documentSnapshot.toObject(Recipe.class);
+            }
+        });
 
         //getting Data from Database
         initializeArrayList();
+    }
 
-        toAddIngredientBtn = findViewById(R.id.idBtnToAddIngredient);
+    public void addIngredientBtnClicked() {
+        Bundle b = new Bundle();
+        b.putString("clickedRecipe", getRecipeName());
 
-        toAddIngredientBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View V) {
-                //Creates Bundle with clicked recipe name.
-                Bundle b = new Bundle();
-                b.putString("clickedRecipe", getRecipeName());
-
-                Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
-                i.putExtras(b);
-                startActivity(i);
-            }
-        });
+        Intent i = new Intent(ViewIngredient.this, AddIngredientsActivity.class);
+        i.putExtras(b);
+        startActivity(i);
     }
 
 
